@@ -182,18 +182,47 @@ Generated log files are ignored by Git and are not versioned.
 ---
 # Running
 
-Genesis is currently under early development.
-
-To execute the project:
+After installing the project dependencies, execute:
 
 ```bash
 python -m genesis.main
 ```
 
-At the current stage, execution only validates that the project foundation is correctly configured.
+The simulation engine will start and execute the main simulation loop.
 
-This section will evolve as new simulation systems are implemented.
+Example output:
 
+```
+Simulation loop started
+
+tick=1
+tick=2
+tick=3
+
+Simulation loop finished
+```
+
+---
+
+# Current Architecture
+
+The current simulation engine contains:
+
+```
+Simulation
+ |
+ +-- Clock
+ |
+ +-- Scheduler
+ |
+ +-- Tick System
+ |
+ +-- Main Loop
+```
+
+The engine is responsible only for simulation execution.
+
+Entities, environment rules, resources, and world behavior will be introduced in future development phases.
 ---
 
 # Project Structure
