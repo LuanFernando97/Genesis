@@ -10,13 +10,15 @@ The goal is **not** to build a game, but to understand how complex behaviors and
 
 The project will be developed incrementally, starting from an empty simulation engine and gradually introducing new mechanics and systems.
 
-## Learning Goals
+---
+
+# Learning Goals
 
 Throughout the development of Genesis, the following topics will be explored:
 
 - Software Architecture
 - Object-Oriented Programming
-- Concurrent Programming (Threads)
+- Concurrent Programming
 - Agent-Based Simulation
 - Artificial Intelligence
 - Emergent Systems
@@ -26,7 +28,9 @@ Throughout the development of Genesis, the following topics will be explored:
 - Automated Testing
 - Performance Optimization
 
-## Project Goals
+---
+
+# Project Goals
 
 Some of the questions this project aims to explore include:
 
@@ -36,13 +40,17 @@ Some of the questions this project aims to explore include:
 - How can simple rules generate complex systems?
 - How can a large-scale simulation remain modular and maintainable?
 
-## Current Status
+---
+
+# Current Status
 
 > 🚧 Early development.
 
 The current focus is building the project's architecture and simulation engine before implementing any simulation mechanics.
 
-## Development Principles
+---
+
+# Development Principles
 
 Genesis follows a few core principles:
 
@@ -55,7 +63,172 @@ Genesis follows a few core principles:
 - Continuous documentation
 - Learning over speed
 
-## Disclaimer
+---
+
+# Installation
+
+## Requirements
+
+- Python 3.11+
+
+---
+
+## Clone repository
+
+```bash
+git clone https://github.com/LuanFernando97/Genesis.git
+
+cd Genesis
+```
+
+---
+
+## Create virtual environment
+
+### Windows
+
+```bash
+python -m venv .venv
+
+.venv\Scripts\activate
+```
+
+### Linux/macOS
+
+```bash
+python3 -m venv .venv
+
+source .venv/bin/activate
+```
+
+---
+
+## Install project
+
+```bash
+pip install -e .
+```
+
+---
+
+## Install development dependencies
+
+```bash
+pip install -e ".[dev]"
+```
+
+---
+
+# Development
+
+## Code Quality
+
+Genesis uses:
+
+- pytest for automated tests
+- ruff for linting, import organization and code formatting
+- pre-commit for automated code quality checks
+
+## Pre-commit
+
+Install hooks:
+
+```bash
+pre-commit install
+```
+Run manually:
+```bash
+pre-commit run --all-files
+```
+Run tests:
+
+```bash
+pytest
+```
+
+
+---
+# Logging
+
+Genesis uses Python's built-in logging system.
+
+The logging system is organized by simulation execution and context.
+
+Each execution creates a unique log directory:
+
+```
+logs/
+└── YYYY-MM-DD_HH-MM-SS/
+    ├── genesis.simulation.log
+    ├── genesis.world.log
+    └── genesis.agent.log
+```
+
+Loggers are created dynamically by context:
+
+```python
+logger = get_logger("genesis.world")
+```
+
+Available log levels:
+
+- DEBUG
+- INFO
+- WARNING
+- ERROR
+- CRITICAL
+
+Generated log files are ignored by Git and are not versioned.
+---
+# Running
+
+Genesis is currently under early development.
+
+To execute the project:
+
+```bash
+python -m genesis.main
+```
+
+At the current stage, execution only validates that the project foundation is correctly configured.
+
+This section will evolve as new simulation systems are implemented.
+
+---
+
+# Project Structure
+
+```
+Genesis/
+│
+├── docs/
+│
+├── examples/
+│
+├── logs/
+│
+├── src/
+│   └── genesis/
+│
+├── tests/
+│
+├── CHANGELOG.md
+├── README.md
+├── TODO.md
+└── pyproject.toml
+```
+
+---
+
+# Contributing
+
+Genesis is currently a personal experimental project.
+
+The main objective is exploration, learning, and incremental development of simulation systems.
+
+---
+
+# Disclaimer
 
 This is an **educational and experimental project**.
 
