@@ -25,7 +25,7 @@ def _create_logger(name: str, level: int, format_str: str) -> logging.Logger:
     format = (
         format_str
         if format_str
-        else "%(asctime)s | %(levelname)s | %(name)s | %(message)s"
+        else "%(levelname)s | %(asctime)s | %(name)s | %(message)s"
     )
     formatter = logging.Formatter(format)
     file_handler = logging.FileHandler(log_file)
