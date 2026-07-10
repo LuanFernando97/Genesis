@@ -1,6 +1,6 @@
 # Genesis
 
-> **Genesis** is a study and experimental project focused on building a civilization simulation from scratch.
+> **Genesis** is an experimental project focused on building a civilization simulation from scratch using autonomous agents and emergent behavior.
 
 ## About
 
