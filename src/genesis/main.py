@@ -1,12 +1,12 @@
 from time import sleep
 
-from genesis.core.simulation import Simulation
+from genesis.simulation.simulation import Simulation
 
 
 def main():
     simulation = Simulation()
 
-    simulation.set_speed(1)
+    simulation.set_speed(10)
 
     simulation.start()
     try:

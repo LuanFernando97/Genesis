@@ -2,9 +2,9 @@ from enum import Enum
 from threading import Thread
 from time import sleep
 
-from genesis.core.clock import Clock
-from genesis.core.scheduler import Scheduler
 from genesis.infrastructure.logger import get_logger
+from genesis.simulation.clock import Clock
+from genesis.simulation.scheduler import Scheduler
 
 
 class SimulationState(Enum):

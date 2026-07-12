@@ -1,4 +1,4 @@
-from genesis.core.clock import Clock
+from genesis.simulation.clock import Clock
 
 
 def test_clock_initial_state():
