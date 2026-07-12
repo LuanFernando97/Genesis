@@ -2,8 +2,13 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from genesis.core.scheduler import Event
-from genesis.core.simulation import MAX_SPEED, MIN_SPEED, Simulation, SimulationState
+from genesis.simulation.scheduler import Event
+from genesis.simulation.simulation import (
+    MAX_SPEED,
+    MIN_SPEED,
+    Simulation,
+    SimulationState,
+)
 
 
 def test_tick_advances_clock():

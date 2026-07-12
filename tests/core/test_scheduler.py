@@ -1,4 +1,4 @@
-from genesis.core.scheduler import Event, Scheduler
+from genesis.simulation.scheduler import Event, Scheduler
 
 
 def test_schedule_event():
