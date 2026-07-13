@@ -72,3 +72,61 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added Clock architecture documentation.
 - Added Scheduler documentation.
 - Updated README with simulation execution instructions.
+
+---
+
+## [0.2.0] - 2026-07-13
+
+### Added
+
+- Implemented the world system.
+- Added `World` class representing the simulation environment.
+- Added `Grid` structure for storing world tiles.
+- Added immutable `Position` coordinate system.
+- Added `Tile` class representing individual map cells.
+- Added terrain system with the following terrain types:
+  - Plain
+  - Forest
+  - Mountain
+  - Water
+  - Desert
+- Added natural resource system with:
+  - Wood
+  - Stone
+  - Water
+  - Food
+  - Ore
+- Added procedural world generation through `WorldGenerator`.
+- Added deterministic world generation using configurable seeds.
+- Added resource distribution rules based on terrain types.
+- Integrated the world system into the simulation engine.
+- Added world update execution during simulation ticks.
+- Added world generation and update logging.
+
+### Changed
+
+- Expanded the project architecture with a dedicated world module.
+- Updated the simulation initialization flow to automatically generate the world.
+- Improved project structure by introducing infrastructure components shared across systems.
+
+### Testing
+
+- Added unit tests for:
+  - World
+  - Grid
+  - Position
+  - Tile
+  - Terrain
+  - Resource
+  - WorldGenerator
+- Added integration tests between `Simulation` and `World`.
+- Improved overall test coverage for the world system.
+
+### Documentation
+
+- Added world system documentation.
+- Documented the Grid architecture.
+- Documented the coordinate system.
+- Documented procedural world generation.
+- Updated the project architecture documentation.
+- Updated README with world generation examples.
