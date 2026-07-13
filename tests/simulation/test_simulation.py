@@ -7,71 +7,109 @@ from genesis.simulation.simulation import (
     MAX_SPEED,
     MIN_SPEED,
     Simulation,
+    SimulationMode,
     SimulationState,
 )
 
+# =============================================================================
+# Initialization
+# =============================================================================
 
-def test_tick_advances_clock():
-    simulation = Simulation()
 
-    simulation.state = SimulationState.RUNNING
+def test_simulation_has_world_configuration():
+    simulation = Simulation(
+        world_width=50,
+        world_height=30,
+        seed=123,
+        mode=SimulationMode.STEP,
+    )
+
+    assert simulation.world is None
+    assert simulation.world_width == 50
+    assert simulation.world_height == 30
+    assert simulation.seed == 123
+    assert simulation.mode is SimulationMode.STEP
+
+
+# =============================================================================
+# World Integration
+# =============================================================================
+
+
+def test_start_creates_world():
+    simulation = Simulation(
+        world_width=20,
+        world_height=10,
+        seed=123,
+        mode=SimulationMode.STEP,
+    )
+
+    assert simulation.world is None
+
+    simulation.start()
+
+    assert simulation.world is not None
+    assert simulation.world.width == 20
+    assert simulation.world.height == 10
+    assert simulation.world.seed == 123
+
+
+def test_tick_updates_world():
+    simulation = Simulation(
+        mode=SimulationMode.STEP,
+    )
+
+    simulation.start()
+
+    simulation.world.update = MagicMock()
+
     simulation.tick()
 
-    assert simulation.clock.current_tick == 1
+    simulation.world.update.assert_called_once()
 
 
-def test_tick_increments_counter():
-    simulation = Simulation()
-
-    simulation.state = SimulationState.RUNNING
-
-    simulation.tick()
-    simulation.tick()
-
-    assert simulation.executed_ticks == 2
-
-
-def test_tick_does_nothing_when_not_running():
-    simulation = Simulation()
-
-    simulation.tick()
-
-    assert simulation.clock.current_tick == 0
-    assert simulation.executed_ticks == 0
+# =============================================================================
+# Lifecycle
+# =============================================================================
 
 
 def test_start():
-    simulation = Simulation()
+    simulation = Simulation(
+        mode=SimulationMode.STEP,
+    )
 
     simulation.start()
 
     assert simulation.state is SimulationState.RUNNING
-    simulation.stop()
 
 
 def test_pause():
-    simulation = Simulation()
+    simulation = Simulation(
+        mode=SimulationMode.STEP,
+    )
 
     simulation.start()
     simulation.pause()
 
     assert simulation.state is SimulationState.PAUSED
-    simulation.stop()
 
 
 def test_resume():
-    simulation = Simulation()
+    simulation = Simulation(
+        mode=SimulationMode.STEP,
+    )
 
     simulation.start()
     simulation.pause()
     simulation.resume()
 
     assert simulation.state is SimulationState.RUNNING
-    simulation.stop()
 
 
 def test_stop():
-    simulation = Simulation()
+    simulation = Simulation(
+        mode=SimulationMode.REALTIME,
+    )
 
     simulation.start()
     simulation.stop()
@@ -80,14 +118,18 @@ def test_stop():
 
 
 def test_cannot_pause_before_start():
-    simulation = Simulation()
+    simulation = Simulation(
+        mode=SimulationMode.STEP,
+    )
 
     with pytest.raises(RuntimeError):
         simulation.pause()
 
 
 def test_cannot_resume_without_pause():
-    simulation = Simulation()
+    simulation = Simulation(
+        mode=SimulationMode.STEP,
+    )
 
     simulation.start()
 
@@ -96,7 +138,9 @@ def test_cannot_resume_without_pause():
 
 
 def test_cannot_start_twice():
-    simulation = Simulation()
+    simulation = Simulation(
+        mode=SimulationMode.STEP,
+    )
 
     simulation.start()
 
@@ -105,13 +149,91 @@ def test_cannot_start_twice():
 
 
 def test_cannot_resume_after_stop():
-    simulation = Simulation()
+    simulation = Simulation(
+        mode=SimulationMode.REALTIME,
+    )
 
     simulation.start()
     simulation.stop()
 
     with pytest.raises(RuntimeError):
         simulation.resume()
+
+
+# =============================================================================
+# Tick
+# =============================================================================
+
+
+def test_tick_advances_clock():
+    simulation = Simulation(
+        mode=SimulationMode.STEP,
+    )
+
+    simulation.start()
+
+    simulation.tick()
+
+    assert simulation.clock.current_tick == 1
+
+
+def test_tick_increments_counter():
+    simulation = Simulation(
+        mode=SimulationMode.STEP,
+    )
+
+    simulation.start()
+
+    simulation.tick()
+    simulation.tick()
+
+    assert simulation.executed_ticks == 2
+
+
+def test_tick_does_nothing_when_not_running():
+    simulation = Simulation(
+        mode=SimulationMode.STEP,
+    )
+
+    simulation.tick()
+
+    assert simulation.clock.current_tick == 0
+    assert simulation.executed_ticks == 0
+
+
+# =============================================================================
+# Scheduler
+# =============================================================================
+
+
+def test_tick_executes_scheduled_event():
+    simulation = Simulation(
+        mode=SimulationMode.STEP,
+    )
+
+    executed = False
+
+    def callback():
+        nonlocal executed
+        executed = True
+
+    simulation.scheduler.schedule(
+        Event(
+            tick=1,
+            callback=callback,
+        )
+    )
+
+    simulation.start()
+
+    simulation.tick()
+
+    assert executed
+
+
+# =============================================================================
+# Speed Control
+# =============================================================================
 
 
 def test_default_speed():
@@ -168,42 +290,30 @@ def test_speed_interval():
     assert 1 / simulation.speed == 0.1
 
 
-def test_run_executes_tick():
-    simulation = Simulation()
-
-    simulation.state = SimulationState.RUNNING
-
-    simulation.tick = MagicMock(side_effect=simulation.stop)
-
-    simulation.run()
-
-    simulation.tick.assert_called_once()
+# =============================================================================
+# Execution Mode
+# =============================================================================
 
 
-def test_run_stops():
-    simulation = Simulation()
+def test_step_mode_does_not_create_running_thread():
+    simulation = Simulation(
+        mode=SimulationMode.STEP,
+    )
 
-    simulation.state = SimulationState.RUNNING
-    simulation.tick = MagicMock(side_effect=simulation.stop)
+    simulation.start()
 
-    simulation.run()
-
-    assert simulation.state == SimulationState.STOPPED
+    assert simulation.thread is not None
+    assert not simulation.thread.is_alive()
 
 
-def test_tick_executes_scheduled_event():
-    simulation = Simulation()
+def test_realtime_mode_starts_thread():
+    simulation = Simulation(
+        mode=SimulationMode.REALTIME,
+    )
 
-    executed = False
+    simulation.start()
 
-    def callback():
-        nonlocal executed
-        executed = True
+    assert simulation.thread is not None
+    assert simulation.thread.is_alive()
 
-    simulation.scheduler.schedule(Event(tick=1, callback=callback))
-
-    simulation.state = SimulationState.RUNNING
-
-    simulation.tick()
-
-    assert executed
+    simulation.stop()
