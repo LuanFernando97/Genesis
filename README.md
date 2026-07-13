@@ -46,7 +46,8 @@ Some of the questions this project aims to explore include:
 
 > 🚧 Early development.
 
-The current focus is building the project's architecture and simulation engine before implementing any simulation mechanics.
+The simulation engine and world generation system are implemented.
+Future phases will introduce autonomous entities, behaviors, and civilizations.
 
 ---
 
@@ -188,7 +189,13 @@ After installing the project dependencies, execute:
 python -m genesis.main
 ```
 
-The simulation engine will start and execute the main simulation loop.
+The simulation initializes:
+
+- Clock
+- Scheduler
+- Procedurally generated World
+
+In realtime mode, the simulation automatically starts executing simulation ticks.
 
 Example output:
 
@@ -203,6 +210,31 @@ Simulation loop finished
 ```
 
 ---
+# World Generation
+
+The simulation now includes a deterministic procedural world generation system.
+
+Example:
+
+```python
+from genesis.simulation.simulation import Simulation
+from genesis.simulation.simulation import SimulationMode
+
+simulation = Simulation(
+    world_width=100,
+    world_height=100,
+    seed=12345,
+    mode=SimulationMode.STEP,
+)
+
+simulation.start()
+
+world = simulation.world
+```
+
+The same seed always generates the same world, ensuring deterministic simulations.
+
+---
 
 # Current Architecture
 
@@ -210,19 +242,29 @@ The current simulation engine contains:
 
 ```
 Simulation
- |
- +-- Clock
- |
- +-- Scheduler
- |
- +-- Tick System
- |
- +-- Main Loop
+│
+├── Clock
+├── Scheduler
+└── World
+    ├── Grid
+    ├── Tiles
+    ├── Terrain
+    ├── Resources
+    └── WorldGenerator
 ```
 
-The engine is responsible only for simulation execution.
+The current implementation provides:
 
-Entities, environment rules, resources, and world behavior will be introduced in future development phases.
+- Simulation lifecycle management
+- Clock and Scheduler
+- Tick execution system
+- Procedural world generation
+- Deterministic random seeds
+- Grid-based world representation
+- Terrain and natural resources
+
+Future phases will introduce autonomous entities, behaviors, civilizations, and environmental systems.
+
 ---
 
 # Project Structure

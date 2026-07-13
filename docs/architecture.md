@@ -60,33 +60,33 @@ Important behaviors should be reproducible whenever possible.
 
 # High-Level Architecture
 
-The initial architecture is organized around independent simulation components.
+The current architecture is organized around the simulation engine and the world system.
 
 ```
 src/
 └── genesis/
     │
-    ├── core/
+    ├── simulation/
     │   ├── simulation.py
+    │   ├── scheduler.py
+    │   └── clock.py
+    │
+    ├── world/
     │   ├── world.py
-    │   └── time.py
+    │   ├── world_generator.py
+    │   ├── grid.py
+    │   ├── tile.py
+    │   ├── terrain.py
+    │   └── resource.py
     │
-    ├── agents/
-    │   ├── agent.py
-    │   └── behavior.py
-    │
-    ├── environment/
-    │   ├── resources.py
-    │   └── terrain.py
-    │
-    ├── systems/
-    │
-    ├── utils/
+    ├── infrastructure/
+    │   ├── position.py
+    │   └── logger.py
     │
     └── main.py
 ```
 
-This structure is expected to evolve as the project grows.
+The architecture is intentionally modular so new simulation systems can be introduced without affecting existing components.
 
 ---
 
@@ -107,14 +107,18 @@ Responsibilities:
 
 ## World
 
-Represents the simulated environment.
+Represents the physical environment of the simulation.
 
-Responsibilities:
+The world is composed of:
 
-- Manage space
-- Store entities
-- Provide environmental information
-- Control world state
+- Grid
+- Tiles
+- Terrain
+- Natural Resources
+
+World generation is deterministic and performed through the WorldGenerator using a configurable random seed.
+
+The World is updated once every simulation Tick.
 
 ---
 
