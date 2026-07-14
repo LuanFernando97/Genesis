@@ -130,3 +130,44 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Documented procedural world generation.
 - Updated the project architecture documentation.
 - Updated README with world generation examples.
+
+---
+
+## [0.3.0] - 2026-07-14
+
+### Added
+
+- Implemented the entity infrastructure.
+- Added abstract `Entity` base class.
+- Added entity lifecycle management through `spawn()` and `despawn()`.
+- Added `EntityRegistry` for managing active entities.
+- Added `EntityIdGenerator` for automatic entity identification.
+- Added globally unique UUID generation for entities.
+- Added incremental display IDs for each entity type.
+- Added automatic entity registration during spawn.
+- Added automatic entity removal during despawn.
+- Added entity state tracking through `is_alive`.
+
+### Changed
+
+- Expanded the project architecture with a dedicated entity module.
+- Introduced a centralized entity lifecycle management model.
+- Improved the foundation for future autonomous entity implementations.
+
+### Testing
+
+- Added unit tests for:
+  - Entity
+  - EntityRegistry
+  - EntityIdGenerator
+- Added lifecycle tests covering entity spawning and despawning.
+- Added tests for UUID generation and incremental display IDs.
+- Improved overall test coverage for the entity infrastructure.
+
+### Documentation
+
+- Added entity infrastructure documentation.
+- Documented the entity lifecycle.
+- Documented the entity identification strategy.
+- Updated the project architecture documentation.
+- Updated README with the entity system.
