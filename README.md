@@ -46,7 +46,7 @@ Some of the questions this project aims to explore include:
 
 > 🚧 Early development.
 
-The simulation engine and world generation system are implemented.
+The simulation engine, procedural world generation, and entity infrastructure are implemented.
 Future phases will introduce autonomous entities, behaviors, and civilizations.
 
 ---
@@ -194,6 +194,7 @@ The simulation initializes:
 - Clock
 - Scheduler
 - Procedurally generated World
+- Entity infrastructure
 
 In realtime mode, the simulation automatically starts executing simulation ticks.
 
@@ -242,15 +243,21 @@ The current simulation engine contains:
 
 ```
 Simulation
-│
-├── Clock
-├── Scheduler
-└── World
+    │
+    ├── Clock
+    └── Scheduler
+
+World
     ├── Grid
     ├── Tiles
     ├── Terrain
     ├── Resources
     └── WorldGenerator
+
+Entity
+│
+├── EntityIdGenerator
+└── EntityRegistry
 ```
 
 The current implementation provides:
@@ -262,8 +269,12 @@ The current implementation provides:
 - Deterministic random seeds
 - Grid-based world representation
 - Terrain and natural resources
+- Base entity infrastructure
+- Automatic entity identification
+- Entity lifecycle management (`spawn` / `despawn`)
+- Centralized entity registry
 
-Future phases will introduce autonomous entities, behaviors, civilizations, and environmental systems.
+Future phases will introduce concrete entity types (such as humans and animals), autonomous behaviors, civilizations, and environmental systems.
 
 ---
 

@@ -79,6 +79,11 @@ src/
     │   ├── terrain.py
     │   └── resource.py
     │
+    ├── entities/
+    │   ├── entity.py
+    │   ├── registry.py
+    │   └── id_generator.py
+    │
     ├── infrastructure/
     │   ├── position.py
     │   └── logger.py
@@ -122,18 +127,34 @@ The World is updated once every simulation Tick.
 
 ---
 
-## Agents
+## Entities
 
-Autonomous entities inside the simulation.
+Entities represent every object capable of existing within the simulation.
 
-Possible responsibilities:
+The current implementation provides the infrastructure required to manage entity lifecycle, identification, and registration.
 
-- Perception
-- Decision making
-- Actions
-- Interaction with environment
-- Interaction with other agents
+Current components:
 
+- Entity
+- EntityIdGenerator
+- EntityRegistry
+
+Future entity types will include humans, animals, plants, and other simulation objects.
+
+---
+
+# Entity Lifecycle
+
+Entities are responsible for managing their own lifecycle.
+
+Each entity:
+
+- Receives a globally unique UUID.
+- Receives an incremental display identifier per entity type.
+- Registers itself during `spawn()`.
+- Removes itself from the registry during `despawn()`.
+
+The entity registry maintains the set of active entities currently present in the simulation.
 ---
 
 ## Systems
@@ -155,6 +176,9 @@ Examples:
 The simulation follows a cycle:
 
 ```
+Entity Spawn
+    |
+    v
 World State
     |
     v
@@ -240,6 +264,7 @@ Possible future components:
 - Save/load simulations
 - Visualization layer
 - Distributed simulation
+- Autonomous agent behaviors
 - Advanced AI models
 - Performance optimization
 - Large-scale world management
