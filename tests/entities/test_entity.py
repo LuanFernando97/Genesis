@@ -1,5 +1,3 @@
-import pytest
-
 from genesis.entities.entity import Entity
 
 
@@ -15,23 +13,14 @@ class FakeSimulation:
     pass
 
 
-@pytest.fixture(autouse=True)
-def reset_entity_state():
-    Entity._reset()
-
-
-def test_entity_spawn_creates_entity():
-    simulation = FakeSimulation()
-
+def test_entity_spawn_creates_entity(simulation):
     entity = FakeEntity.spawn(simulation)
 
     assert isinstance(entity, FakeEntity)
     assert entity.simulation == simulation
 
 
-def test_entity_spawn_generates_unique_ids():
-    simulation = FakeSimulation()
-
+def test_entity_spawn_generates_unique_ids(simulation):
     entity_1 = FakeEntity.spawn(simulation)
     entity_2 = FakeEntity.spawn(simulation)
 
@@ -40,9 +29,7 @@ def test_entity_spawn_generates_unique_ids():
     assert entity_2.display_id == 2
 
 
-def test_entities_registry_contains_spawned_entities():
-    simulation = FakeSimulation()
-
+def test_entities_registry_contains_spawned_entities(simulation):
     entity_1 = FakeEntity.spawn(simulation)
     entity_2 = FakeEntity2.spawn(simulation)
 
@@ -53,17 +40,13 @@ def test_entities_registry_contains_spawned_entities():
     assert len(entities) == 2
 
 
-def test_entity_is_alive_after_spawn():
-    simulation = FakeSimulation()
-
+def test_entity_is_alive_after_spawn(simulation):
     entity = FakeEntity.spawn(simulation)
 
     assert entity.is_alive is True
 
 
-def test_entity_despawn_removes_entity_from_registry():
-    simulation = FakeSimulation()
-
+def test_entity_despawn_removes_entity_from_registry(simulation):
     entity = FakeEntity.spawn(simulation)
 
     entity.despawn()
@@ -74,9 +57,7 @@ def test_entity_despawn_removes_entity_from_registry():
     assert entity.is_alive is False
 
 
-def test_entity_despawn_is_idempotent():
-    simulation = FakeSimulation()
-
+def test_entity_despawn_is_idempotent(simulation):
     entity = FakeEntity.spawn(simulation)
 
     entity.despawn()
@@ -85,9 +66,7 @@ def test_entity_despawn_is_idempotent():
     assert entity.is_alive is False
 
 
-def test_entity_repr_returns_class_name_and_display_id():
-    simulation = FakeSimulation()
-
+def test_entity_repr_returns_class_name_and_display_id(simulation):
     entity = FakeEntity.spawn(simulation)
 
     assert repr(entity) == "FakeEntity_1"
