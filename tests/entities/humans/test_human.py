@@ -4,69 +4,76 @@ from genesis.entities.entity import Entity
 from genesis.entities.humans.human import Human
 from genesis.entities.humans.needs import Needs
 from genesis.entities.humans.sex import Sex
+from genesis.infrastructure.position import Position
 
 
 def test_human_is_entity():
     assert issubclass(Human, Entity)
 
 
-def test_can_create_human(simulation):
+def test_can_create_human(simulation, position):
     human = Human(
         simulation=simulation,
         name="John",
         sex=Sex.MALE,
         age=25,
+        position=position,
     )
 
     assert isinstance(human, Human)
     assert human.is_alive
+    assert human.position is position
 
 
-def test_human_name(simulation):
+def test_human_name(simulation, position):
     human = Human(
         simulation=simulation,
         name="John",
         sex=Sex.MALE,
         age=25,
+        position=position,
     )
 
     assert human.name == "John"
 
 
-def test_human_sex(simulation):
+def test_human_sex(simulation, position):
     human = Human(
         simulation=simulation,
         name="John",
         sex=Sex.MALE,
         age=25,
+        position=position,
     )
 
     assert human.sex == Sex.MALE
 
 
-def test_human_age(simulation):
+def test_human_age(simulation, position):
     human = Human(
         simulation=simulation,
         name="John",
         sex=Sex.MALE,
         age=25,
+        position=position,
     )
 
     assert human.age == 25
 
 
-def test_human_creates_default_needs(simulation):
+def test_human_creates_default_needs(simulation, position):
     human = Human(
         simulation=simulation,
         name="John",
         sex=Sex.MALE,
         age=25,
+        position=position,
     )
 
     assert isinstance(human.needs, Needs)
 
 
-def test_human_accepts_custom_needs(simulation):
+def test_human_accepts_custom_needs(simulation, position):
     needs = Needs(
         energy=50,
         hunger=25,
@@ -79,29 +86,32 @@ def test_human_accepts_custom_needs(simulation):
         name="John",
         sex=Sex.MALE,
         age=25,
+        position=position,
         needs=needs,
     )
 
     assert human.needs is needs
 
 
-def test_name_is_required(simulation):
+def test_name_is_required(simulation, position):
     with pytest.raises(ValueError):
         Human(
             simulation=simulation,
             name="",
             sex=Sex.MALE,
             age=25,
+            position=position,
         )
 
 
-def test_age_cannot_be_negative(simulation):
+def test_age_cannot_be_negative(simulation, position):
     with pytest.raises(ValueError):
         Human(
             simulation=simulation,
             name="John",
             sex=Sex.MALE,
             age=-1,
+            position=position,
         )
 
 
@@ -121,3 +131,39 @@ def test_age_cannot_be_negative(simulation):
 def test_invalid_needs_values(field, kwargs):
     with pytest.raises(ValueError):
         Needs(**kwargs)
+
+
+def test_can_change_position(simulation, position):
+    human = Human(
+        simulation=simulation, name="John", sex=Sex.MALE, age=25, position=position
+    )
+
+    new_position = Position(10, 20)
+
+    human.position = new_position
+
+    assert human.position is new_position
+
+
+def test_position_must_be_position(simulation):
+    with pytest.raises(TypeError):
+        Human(
+            simulation=simulation,
+            name="John",
+            sex=Sex.MALE,
+            age=25,
+            position=(0, 0),
+        )
+
+
+def test_cannot_assign_invalid_position(simulation):
+    human = Human(
+        simulation=simulation,
+        name="John",
+        sex=Sex.MALE,
+        age=25,
+        position=Position(0, 0),
+    )
+
+    with pytest.raises(TypeError):
+        human.position = (5, 5)
