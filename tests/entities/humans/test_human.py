@@ -2,6 +2,7 @@ import pytest
 
 from genesis.entities.entity import Entity
 from genesis.entities.humans.human import Human
+from genesis.entities.humans.human_state import HumanState
 from genesis.entities.humans.needs import Needs
 from genesis.entities.humans.sex import Sex
 from genesis.infrastructure.position import Position
@@ -167,3 +168,67 @@ def test_cannot_assign_invalid_position(simulation):
 
     with pytest.raises(TypeError):
         human.position = (5, 5)
+
+
+def test_default_state_is_idle(simulation):
+    human = Human(
+        simulation=simulation,
+        name="John",
+        sex=Sex.MALE,
+        age=25,
+        position=Position(0, 0),
+    )
+
+    assert human.state == HumanState.IDLE
+
+
+def test_can_create_human_with_custom_state(simulation):
+    human = Human(
+        simulation=simulation,
+        name="John",
+        sex=Sex.MALE,
+        age=25,
+        position=Position(0, 0),
+        state=HumanState.SLEEPING,
+    )
+
+    assert human.state == HumanState.SLEEPING
+
+
+def test_can_change_state(simulation):
+    human = Human(
+        simulation=simulation,
+        name="John",
+        sex=Sex.MALE,
+        age=25,
+        position=Position(0, 0),
+    )
+
+    human.state = HumanState.WALKING
+
+    assert human.state == HumanState.WALKING
+
+
+def test_invalid_state(simulation):
+    with pytest.raises(TypeError):
+        Human(
+            simulation=simulation,
+            name="John",
+            sex=Sex.MALE,
+            age=25,
+            position=Position(0, 0),
+            state="walking",
+        )
+
+
+def test_cannot_assign_invalid_state(simulation):
+    human = Human(
+        simulation=simulation,
+        name="John",
+        sex=Sex.MALE,
+        age=25,
+        position=Position(0, 0),
+    )
+
+    with pytest.raises(TypeError):
+        human.state = "sleeping"

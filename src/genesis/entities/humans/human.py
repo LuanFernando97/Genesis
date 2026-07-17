@@ -2,6 +2,7 @@ from genesis.entities.entity import Entity
 from genesis.infrastructure.position import Position
 from genesis.simulation.simulation import Simulation
 
+from .human_state import HumanState
 from .needs import Needs
 from .sex import Sex
 
@@ -15,6 +16,7 @@ class Human(Entity):
         age: int,
         position: Position,
         needs: Needs | None = None,
+        state: HumanState = HumanState.IDLE,
     ) -> None:
         super().__init__(simulation)
 
@@ -27,10 +29,14 @@ class Human(Entity):
         if not isinstance(position, Position):
             raise TypeError("position must be a Position.")
 
+        if not isinstance(state, HumanState):
+            raise TypeError("state must be a HumanState.")
+
         self._name = name
         self._sex = sex
         self._age = age
         self._position = position
+        self._state = state
         self._needs = needs or Needs()
 
     @property
@@ -53,9 +59,20 @@ class Human(Entity):
     def position(self) -> Position:
         return self._position
 
+    @property
+    def state(self) -> HumanState:
+        return self._state
+
     @position.setter
     def position(self, position: Position) -> None:
         if not isinstance(position, Position):
             raise TypeError("position must be a Position.")
 
         self._position = position
+
+    @state.setter
+    def state(self, state: HumanState) -> None:
+        if not isinstance(state, HumanState):
+            raise TypeError("state must be a HumanState.")
+
+        self._state = state
