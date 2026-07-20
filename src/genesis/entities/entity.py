@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from abc import ABC
+from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Iterator, Self
 
 from genesis.entities.id_generator import EntityIdGenerator
@@ -55,6 +55,10 @@ class Entity(ABC):
         self._registry.remove(self)
 
         self._alive = False
+
+    @abstractmethod
+    def update(self) -> None:
+        pass
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}_{self.display_id}"

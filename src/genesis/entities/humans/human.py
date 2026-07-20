@@ -83,3 +83,15 @@ class Human(Entity):
             raise TypeError("state must be a HumanState.")
 
         self._state = state
+
+    def update(self):
+        self._update_needs()
+        self._update_state()
+
+    def _update_needs(self):
+        self._needs.decrease_energy(1)
+        self._needs.increase_hunger(1)
+        self._needs.increase_thirst(1)
+
+    def _update_state(self):
+        pass

@@ -2,15 +2,18 @@ from genesis.entities.entity import Entity
 
 
 class FakeEntity(Entity):
-    pass
+    def update(self):
+        pass
 
 
 class FakeEntity2(Entity):
-    pass
+    def update(self):
+        pass
 
 
 class FakeSimulation:
-    pass
+    def update(self):
+        pass
 
 
 def test_entity_spawn_creates_entity(simulation):

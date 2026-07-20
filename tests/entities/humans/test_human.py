@@ -273,3 +273,113 @@ def test_human_always_has_valid_inventory(simulation):
 
     assert human.inventory is not None
     assert isinstance(human.inventory, Inventory)
+
+
+def test_update_decreases_energy(simulation):
+    human = Human(
+        simulation=simulation,
+        name="John",
+        sex=Sex.MALE,
+        age=20,
+        position=Position(0, 0),
+        needs=Needs(energy=50),
+    )
+
+    human.update()
+
+    assert human.needs.energy == 49
+
+
+def test_update_increases_hunger(simulation):
+    human = Human(
+        simulation=simulation,
+        name="John",
+        sex=Sex.MALE,
+        age=20,
+        position=Position(0, 0),
+        needs=Needs(hunger=50),
+    )
+
+    human.update()
+
+    assert human.needs.hunger == 51
+
+
+def test_update_increases_thirst(simulation):
+    human = Human(
+        simulation=simulation,
+        name="John",
+        sex=Sex.MALE,
+        age=20,
+        position=Position(0, 0),
+        needs=Needs(thirst=50),
+    )
+
+    human.update()
+
+    assert human.needs.thirst == 51
+
+
+def test_update_updates_all_needs(simulation):
+    human = Human(
+        simulation=simulation,
+        name="John",
+        sex=Sex.MALE,
+        age=20,
+        position=Position(0, 0),
+        needs=Needs(
+            energy=50,
+            hunger=50,
+            thirst=50,
+            health=100,
+        ),
+    )
+
+    human.update()
+
+    assert human.needs.energy == 49
+    assert human.needs.hunger == 51
+    assert human.needs.thirst == 51
+    assert human.needs.health == 100
+
+
+def test_update_respects_needs_limits(simulation):
+    human = Human(
+        simulation=simulation,
+        name="John",
+        sex=Sex.MALE,
+        age=20,
+        position=Position(0, 0),
+        needs=Needs(
+            energy=0,
+            hunger=100,
+            thirst=100,
+        ),
+    )
+
+    human.update()
+
+    assert human.needs.energy == 0
+    assert human.needs.hunger == 100
+    assert human.needs.thirst == 100
+
+
+def test_update_does_not_change_identity_or_state(simulation):
+    position = Position(5, 10)
+
+    human = Human(
+        simulation=simulation,
+        name="John",
+        sex=Sex.MALE,
+        age=20,
+        position=position,
+        state=HumanState.IDLE,
+    )
+
+    human.update()
+
+    assert human.name == "John"
+    assert human.age == 20
+    assert human.sex == Sex.MALE
+    assert human.position is position
+    assert human.state == HumanState.IDLE
