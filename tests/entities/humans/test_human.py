@@ -5,6 +5,7 @@ from genesis.entities.humans.human import Human
 from genesis.entities.humans.human_state import HumanState
 from genesis.entities.humans.needs import Needs
 from genesis.entities.humans.sex import Sex
+from genesis.entities.inventories.inventory import Inventory
 from genesis.infrastructure.position import Position
 
 
@@ -232,3 +233,43 @@ def test_cannot_assign_invalid_state(simulation):
 
     with pytest.raises(TypeError):
         human.state = "sleeping"
+
+
+def test_human_creates_default_inventory(simulation):
+    human = Human(
+        simulation=simulation,
+        name="John",
+        sex=Sex.MALE,
+        age=25,
+        position=Position(0, 0),
+    )
+
+    assert isinstance(human.inventory, Inventory)
+
+
+def test_human_accepts_custom_inventory(simulation):
+    inventory = Inventory()
+
+    human = Human(
+        simulation=simulation,
+        name="John",
+        sex=Sex.MALE,
+        age=25,
+        position=Position(0, 0),
+        inventory=inventory,
+    )
+
+    assert human.inventory is inventory
+
+
+def test_human_always_has_valid_inventory(simulation):
+    human = Human(
+        simulation=simulation,
+        name="John",
+        sex=Sex.MALE,
+        age=25,
+        position=Position(0, 0),
+    )
+
+    assert human.inventory is not None
+    assert isinstance(human.inventory, Inventory)

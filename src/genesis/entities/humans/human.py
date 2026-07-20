@@ -1,4 +1,5 @@
 from genesis.entities.entity import Entity
+from genesis.entities.inventories.inventory import Inventory
 from genesis.infrastructure.position import Position
 from genesis.simulation.simulation import Simulation
 
@@ -16,6 +17,7 @@ class Human(Entity):
         age: int,
         position: Position,
         needs: Needs | None = None,
+        inventory: Inventory | None = None,
         state: HumanState = HumanState.IDLE,
     ) -> None:
         super().__init__(simulation)
@@ -38,6 +40,7 @@ class Human(Entity):
         self._position = position
         self._state = state
         self._needs = needs or Needs()
+        self._inventory = inventory or Inventory()
 
     @property
     def name(self) -> str:
@@ -62,6 +65,10 @@ class Human(Entity):
     @property
     def state(self) -> HumanState:
         return self._state
+
+    @property
+    def inventory(self) -> Inventory:
+        return self._inventory
 
     @position.setter
     def position(self, position: Position) -> None:
