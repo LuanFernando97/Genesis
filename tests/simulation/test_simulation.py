@@ -373,3 +373,85 @@ def test_simulation_schedules_entity_update():
 
     assert len(simulation.scheduler.events) == 1
     assert simulation.scheduler.events[0].name == "Update Entities"
+
+
+def test_simulation_updates_multiple_humans():
+    simulation = Simulation(mode=SimulationMode.STEP)
+
+    Entity._reset()
+
+    human1 = Human(
+        name="John",
+        sex=Sex.MALE,
+        age=20,
+        position=Position(0, 0),
+    )
+
+    human2 = Human(
+        name="Jane",
+        sex=Sex.FEMALE,
+        age=22,
+        position=Position(1, 1),
+    )
+
+    human1.spawn()
+    human2.spawn()
+
+    simulation.start()
+
+    simulation.tick()
+
+    assert human1.needs.energy == 99
+    assert human1.needs.hunger == 1
+    assert human1.needs.thirst == 1
+
+    assert human2.needs.energy == 99
+    assert human2.needs.hunger == 1
+    assert human2.needs.thirst == 1
+
+
+def test_dead_entities_are_not_updated():
+    simulation = Simulation(mode=SimulationMode.STEP)
+
+    Entity._reset()
+
+    human = Human(
+        name="John",
+        sex=Sex.MALE,
+        age=20,
+        position=Position(0, 0),
+    )
+
+    human.spawn()
+    human.despawn()
+
+    simulation.start()
+
+    simulation.tick()
+
+    assert human.needs.energy == 100
+    assert human.needs.hunger == 0
+    assert human.needs.thirst == 0
+
+
+def test_scheduler_executes_entity_update():
+    simulation = Simulation(mode=SimulationMode.STEP)
+
+    Entity._reset()
+
+    human = Human(
+        name="John",
+        sex=Sex.MALE,
+        age=20,
+        position=Position(0, 0),
+    )
+
+    human.spawn()
+
+    human.update = MagicMock()
+
+    simulation.start()
+
+    simulation.tick()
+
+    human.update.assert_called_once()
