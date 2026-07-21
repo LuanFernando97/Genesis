@@ -9,6 +9,8 @@ Its main responsibilities are:
 - Managing the simulation lifecycle;
 - Advancing simulation time;
 - Processing scheduled events;
+- Updating the world;
+- Updating registered entities;
 - Controlling simulation speed;
 - Running the continuous execution loop.
 
@@ -31,7 +33,13 @@ Simulation
  │     └── Internal time management
  │
  ├── Scheduler
- │     └── Future event management
+ │     └── Event execution
+ │
+ ├── World
+ │     └── World update
+ │
+ ├── Entity Registry
+ │     └── Registered entities
  │
  ├── Tick System
  │     └── Simulation advancement unit
@@ -64,8 +72,9 @@ The simulation is actively executing.
 While running:
 
 - The Clock advances;
-- Scheduled events are processed;
-- Simulation systems are updated.
+- Scheduled events are executed;
+- The World is updated;
+- Registered entities are updated.
 
 ---
 
@@ -119,6 +128,76 @@ resume()      |
 
 STOPPED
 ```
+
+---
+
+# Simulation Tick
+
+Each simulation tick follows the same execution sequence.
+
+```
+tick()
+
+│
+├── Clock.tick()
+│
+├── Scheduler.execute()
+│
+├── World.update()
+│
+└── Log current simulation state
+```
+
+The scheduler is responsible for executing every event scheduled for the current tick.
+
+One of these recurring events is the entity update system.
+
+---
+
+# Entity Update System
+
+Entity updates are performed through the `Scheduler`.
+
+At the beginning of the simulation, a recurring event is scheduled.
+
+```
+Simulation
+
+    │
+
+    ▼
+
+Scheduler
+
+    │
+
+    ▼
+
+Update Entities Event
+
+    │
+
+    ▼
+
+Entity.update()
+```
+
+During execution, the event iterates through every entity currently registered in the `EntityRegistry`.
+
+```
+Entity Registry
+
+├── Human
+├── Human
+├── Human
+└── ...
+```
+
+Each entity receives exactly one `update()` call per simulation tick.
+
+At the end of its execution, the event schedules itself again for the next tick, creating a continuous update loop.
+
+This design allows newly spawned entities to automatically begin receiving updates while destroyed entities stop being updated once removed from the registry.
 
 ---
 
@@ -186,3 +265,19 @@ This architecture allows future features such as:
 - External controls;
 - Real-time visualization;
 - Multiple simulation environments.
+
+---
+
+# Design Principles
+
+The simulation engine coordinates execution but delegates responsibilities to specialized components.
+
+| Component | Responsibility |
+|----------|----------------|
+| Clock | Manage simulation time |
+| Scheduler | Execute scheduled events |
+| World | Update the simulated world |
+| Entity Registry | Store active entities |
+| Human | Update individual behavior |
+
+This separation keeps the engine simple, extensible and independent from the implementation details of entities and world systems.

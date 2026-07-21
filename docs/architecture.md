@@ -82,11 +82,24 @@ src/
     ├── entities/
     │   ├── entity.py
     │   ├── registry.py
-    │   └── id_generator.py
+    │   ├── id_generator.py
+    │   │
+    │   ├── humans/
+    │   │   ├── human.py
+    │   │   ├── human_state.py
+    │   │   ├── needs.py
+    │   │   └── sex.py
+    │   │
+    │   └── inventories/
+    │       ├── inventory.py
+    │       └── inventory_slot.py
     │
     ├── infrastructure/
     │   ├── position.py
     │   └── logger.py
+    │
+    ├── items/
+    │   └── item.py
     │
     └── main.py
 ```
@@ -126,20 +139,29 @@ World generation is deterministic and performed through the WorldGenerator using
 The World is updated once every simulation Tick.
 
 ---
+## Entities
 
 ## Entities
 
 Entities represent every object capable of existing within the simulation.
 
-The current implementation provides the infrastructure required to manage entity lifecycle, identification, and registration.
-
-Current components:
+The entity infrastructure currently consists of:
 
 - Entity
-- EntityIdGenerator
 - EntityRegistry
+- EntityIdGenerator
 
-Future entity types will include humans, animals, plants, and other simulation objects.
+The first concrete entity implemented is `Human`.
+
+Every human possesses:
+
+- Identity
+- Needs
+- Position
+- Inventory
+- Current State
+
+All entities are automatically registered through the `EntityRegistry` and updated once per simulation tick.
 
 ---
 

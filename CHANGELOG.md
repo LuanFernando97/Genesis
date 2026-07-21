@@ -171,3 +171,67 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Documented the entity identification strategy.
 - Updated the project architecture documentation.
 - Updated README with the entity system.
+  
+---
+
+## [0.4.0] - 2026-07-21
+
+### Added
+
+- Implemented the first autonomous agent: `Human`.
+- Added immutable human identity:
+  - Name
+  - Sex
+  - Age
+- Added `Sex` enumeration.
+- Added `HumanState` enumeration with initial behavior states.
+- Added the `Needs` system:
+  - Energy
+  - Hunger
+  - Thirst
+  - Health
+- Added configurable human positioning through `Position`.
+- Added reusable inventory system.
+- Added abstract `Item` class.
+- Added `InventorySlot` for stack management.
+- Added `Inventory` for storing multiple item stacks.
+- Added automatic inventory creation for humans.
+- Added configurable inventory injection through the constructor.
+- Added automatic human updates through the simulation.
+- Added recurring entity update events managed by the `Scheduler`.
+- Added logging for human update cycles.
+
+### Changed
+
+- Expanded the project architecture with the first autonomous agent implementation.
+- Simulation now updates registered entities through recurring scheduled events.
+- Improved the separation between the simulation engine and entity behavior.
+- Refactored entity updates to be fully event-driven.
+
+### Testing
+
+- Added unit tests for:
+  - Human
+  - Needs
+  - HumanState
+  - Item
+  - InventorySlot
+  - Inventory
+- Added integration tests covering:
+  - Human updates during simulation.
+  - Multiple human updates.
+  - Scheduler-driven entity updates.
+  - Entity lifecycle integration with the simulation.
+- Improved overall test coverage for the agent system.
+
+### Documentation
+
+- Added Human documentation.
+- Added Needs documentation.
+- Added HumanState documentation.
+- Added Item documentation.
+- Added InventorySlot documentation.
+- Added Inventory documentation.
+- Updated Simulation documentation.
+- Updated Scheduler documentation.
+- Updated project architecture documentation.
