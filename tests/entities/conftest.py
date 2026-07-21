@@ -2,12 +2,6 @@ import pytest
 
 from genesis.entities.entity import Entity
 from genesis.infrastructure.position import Position
-from genesis.simulation.simulation import Simulation
-
-
-@pytest.fixture
-def simulation() -> Simulation:
-    return Simulation()
 
 
 @pytest.fixture()

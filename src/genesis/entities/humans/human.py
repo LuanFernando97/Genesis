@@ -1,7 +1,7 @@
-from genesis.entities.entity import Entity
+from genesis.entities.entity import ENTITY_LOGGER_LEVEL, Entity
 from genesis.entities.inventories.inventory import Inventory
+from genesis.infrastructure.logger import get_logger
 from genesis.infrastructure.position import Position
-from genesis.simulation.simulation import Simulation
 
 from .human_state import HumanState
 from .needs import Needs
@@ -9,9 +9,10 @@ from .sex import Sex
 
 
 class Human(Entity):
+    logger = get_logger("human", level=ENTITY_LOGGER_LEVEL)
+
     def __init__(
         self,
-        simulation: Simulation,
         name: str,
         sex: Sex,
         age: int,
@@ -20,7 +21,7 @@ class Human(Entity):
         inventory: Inventory | None = None,
         state: HumanState = HumanState.IDLE,
     ) -> None:
-        super().__init__(simulation)
+        super().__init__()
 
         if not name:
             raise ValueError("Name cannot be empty.")
@@ -85,6 +86,7 @@ class Human(Entity):
         self._state = state
 
     def update(self):
+        Human.logger.debug(self)
         self._update_needs()
         self._update_state()
 
@@ -95,3 +97,19 @@ class Human(Entity):
 
     def _update_state(self):
         pass
+
+    def __repr__(self):
+        return (
+            f"<Human "
+            f"id={self.display_id}, "
+            f"name={self.name}, "
+            f"sex={self.sex.value}, "
+            f"age={self.age}, "
+            f"state={self.state.value}, "
+            f"position={self.position}, "
+            f"energy={self.needs.energy}, "
+            f"hunger={self.needs.hunger}, "
+            f"thirst={self.needs.thirst}, "
+            f"health={self.needs.health}, "
+            f"inventory={len(self.inventory.slots)}>"
+        )

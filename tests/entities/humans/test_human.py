@@ -13,9 +13,8 @@ def test_human_is_entity():
     assert issubclass(Human, Entity)
 
 
-def test_can_create_human(simulation, position):
+def test_can_create_human(position):
     human = Human(
-        simulation=simulation,
         name="John",
         sex=Sex.MALE,
         age=25,
@@ -27,9 +26,8 @@ def test_can_create_human(simulation, position):
     assert human.position is position
 
 
-def test_human_name(simulation, position):
+def test_human_name(position):
     human = Human(
-        simulation=simulation,
         name="John",
         sex=Sex.MALE,
         age=25,
@@ -39,9 +37,8 @@ def test_human_name(simulation, position):
     assert human.name == "John"
 
 
-def test_human_sex(simulation, position):
+def test_human_sex(position):
     human = Human(
-        simulation=simulation,
         name="John",
         sex=Sex.MALE,
         age=25,
@@ -51,9 +48,8 @@ def test_human_sex(simulation, position):
     assert human.sex == Sex.MALE
 
 
-def test_human_age(simulation, position):
+def test_human_age(position):
     human = Human(
-        simulation=simulation,
         name="John",
         sex=Sex.MALE,
         age=25,
@@ -63,9 +59,8 @@ def test_human_age(simulation, position):
     assert human.age == 25
 
 
-def test_human_creates_default_needs(simulation, position):
+def test_human_creates_default_needs(position):
     human = Human(
-        simulation=simulation,
         name="John",
         sex=Sex.MALE,
         age=25,
@@ -75,7 +70,7 @@ def test_human_creates_default_needs(simulation, position):
     assert isinstance(human.needs, Needs)
 
 
-def test_human_accepts_custom_needs(simulation, position):
+def test_human_accepts_custom_needs(position):
     needs = Needs(
         energy=50,
         hunger=25,
@@ -84,7 +79,6 @@ def test_human_accepts_custom_needs(simulation, position):
     )
 
     human = Human(
-        simulation=simulation,
         name="John",
         sex=Sex.MALE,
         age=25,
@@ -95,10 +89,9 @@ def test_human_accepts_custom_needs(simulation, position):
     assert human.needs is needs
 
 
-def test_name_is_required(simulation, position):
+def test_name_is_required(position):
     with pytest.raises(ValueError):
         Human(
-            simulation=simulation,
             name="",
             sex=Sex.MALE,
             age=25,
@@ -106,10 +99,9 @@ def test_name_is_required(simulation, position):
         )
 
 
-def test_age_cannot_be_negative(simulation, position):
+def test_age_cannot_be_negative(position):
     with pytest.raises(ValueError):
         Human(
-            simulation=simulation,
             name="John",
             sex=Sex.MALE,
             age=-1,
@@ -135,10 +127,8 @@ def test_invalid_needs_values(field, kwargs):
         Needs(**kwargs)
 
 
-def test_can_change_position(simulation, position):
-    human = Human(
-        simulation=simulation, name="John", sex=Sex.MALE, age=25, position=position
-    )
+def test_can_change_position(position):
+    human = Human(name="John", sex=Sex.MALE, age=25, position=position)
 
     new_position = Position(10, 20)
 
@@ -147,10 +137,9 @@ def test_can_change_position(simulation, position):
     assert human.position is new_position
 
 
-def test_position_must_be_position(simulation):
+def test_position_must_be_position():
     with pytest.raises(TypeError):
         Human(
-            simulation=simulation,
             name="John",
             sex=Sex.MALE,
             age=25,
@@ -158,9 +147,8 @@ def test_position_must_be_position(simulation):
         )
 
 
-def test_cannot_assign_invalid_position(simulation):
+def test_cannot_assign_invalid_position():
     human = Human(
-        simulation=simulation,
         name="John",
         sex=Sex.MALE,
         age=25,
@@ -171,9 +159,8 @@ def test_cannot_assign_invalid_position(simulation):
         human.position = (5, 5)
 
 
-def test_default_state_is_idle(simulation):
+def test_default_state_is_idle():
     human = Human(
-        simulation=simulation,
         name="John",
         sex=Sex.MALE,
         age=25,
@@ -183,9 +170,8 @@ def test_default_state_is_idle(simulation):
     assert human.state == HumanState.IDLE
 
 
-def test_can_create_human_with_custom_state(simulation):
+def test_can_create_human_with_custom_state():
     human = Human(
-        simulation=simulation,
         name="John",
         sex=Sex.MALE,
         age=25,
@@ -196,9 +182,8 @@ def test_can_create_human_with_custom_state(simulation):
     assert human.state == HumanState.SLEEPING
 
 
-def test_can_change_state(simulation):
+def test_can_change_state():
     human = Human(
-        simulation=simulation,
         name="John",
         sex=Sex.MALE,
         age=25,
@@ -210,10 +195,9 @@ def test_can_change_state(simulation):
     assert human.state == HumanState.WALKING
 
 
-def test_invalid_state(simulation):
+def test_invalid_state():
     with pytest.raises(TypeError):
         Human(
-            simulation=simulation,
             name="John",
             sex=Sex.MALE,
             age=25,
@@ -222,9 +206,8 @@ def test_invalid_state(simulation):
         )
 
 
-def test_cannot_assign_invalid_state(simulation):
+def test_cannot_assign_invalid_state():
     human = Human(
-        simulation=simulation,
         name="John",
         sex=Sex.MALE,
         age=25,
@@ -235,9 +218,8 @@ def test_cannot_assign_invalid_state(simulation):
         human.state = "sleeping"
 
 
-def test_human_creates_default_inventory(simulation):
+def test_human_creates_default_inventory():
     human = Human(
-        simulation=simulation,
         name="John",
         sex=Sex.MALE,
         age=25,
@@ -247,11 +229,10 @@ def test_human_creates_default_inventory(simulation):
     assert isinstance(human.inventory, Inventory)
 
 
-def test_human_accepts_custom_inventory(simulation):
+def test_human_accepts_custom_inventory():
     inventory = Inventory()
 
     human = Human(
-        simulation=simulation,
         name="John",
         sex=Sex.MALE,
         age=25,
@@ -262,9 +243,8 @@ def test_human_accepts_custom_inventory(simulation):
     assert human.inventory is inventory
 
 
-def test_human_always_has_valid_inventory(simulation):
+def test_human_always_has_valid_inventory():
     human = Human(
-        simulation=simulation,
         name="John",
         sex=Sex.MALE,
         age=25,
@@ -275,9 +255,8 @@ def test_human_always_has_valid_inventory(simulation):
     assert isinstance(human.inventory, Inventory)
 
 
-def test_update_decreases_energy(simulation):
+def test_update_decreases_energy():
     human = Human(
-        simulation=simulation,
         name="John",
         sex=Sex.MALE,
         age=20,
@@ -290,9 +269,8 @@ def test_update_decreases_energy(simulation):
     assert human.needs.energy == 49
 
 
-def test_update_increases_hunger(simulation):
+def test_update_increases_hunger():
     human = Human(
-        simulation=simulation,
         name="John",
         sex=Sex.MALE,
         age=20,
@@ -305,9 +283,8 @@ def test_update_increases_hunger(simulation):
     assert human.needs.hunger == 51
 
 
-def test_update_increases_thirst(simulation):
+def test_update_increases_thirst():
     human = Human(
-        simulation=simulation,
         name="John",
         sex=Sex.MALE,
         age=20,
@@ -320,9 +297,8 @@ def test_update_increases_thirst(simulation):
     assert human.needs.thirst == 51
 
 
-def test_update_updates_all_needs(simulation):
+def test_update_updates_all_needs():
     human = Human(
-        simulation=simulation,
         name="John",
         sex=Sex.MALE,
         age=20,
@@ -343,9 +319,8 @@ def test_update_updates_all_needs(simulation):
     assert human.needs.health == 100
 
 
-def test_update_respects_needs_limits(simulation):
+def test_update_respects_needs_limits():
     human = Human(
-        simulation=simulation,
         name="John",
         sex=Sex.MALE,
         age=20,
@@ -364,11 +339,10 @@ def test_update_respects_needs_limits(simulation):
     assert human.needs.thirst == 100
 
 
-def test_update_does_not_change_identity_or_state(simulation):
+def test_update_does_not_change_identity_or_state():
     position = Position(5, 10)
 
     human = Human(
-        simulation=simulation,
         name="John",
         sex=Sex.MALE,
         age=20,

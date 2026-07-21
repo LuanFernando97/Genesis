@@ -2,6 +2,11 @@ from unittest.mock import MagicMock
 
 import pytest
 
+from genesis.entities.entity import Entity
+from genesis.entities.humans.human import Human
+from genesis.entities.humans.needs import Needs
+from genesis.entities.humans.sex import Sex
+from genesis.infrastructure.position import Position
 from genesis.simulation.scheduler import Event
 from genesis.simulation.simulation import (
     MAX_SPEED,
@@ -317,3 +322,54 @@ def test_realtime_mode_starts_thread():
     assert simulation.thread.is_alive()
 
     simulation.stop()
+
+
+# =============================================================================
+# Entity Integration
+# =============================================================================
+
+
+def test_simulation_updates_entities():
+    simulation = Simulation(
+        mode=SimulationMode.STEP,
+    )
+
+    Entity._reset()
+
+    human = Human(
+        name="John",
+        sex=Sex.MALE,
+        age=20,
+        position=Position(0, 0),
+        needs=Needs(
+            energy=50,
+            hunger=50,
+            thirst=50,
+        ),
+    )
+    human.spawn()
+    simulation.start()
+
+    simulation.tick()
+
+    assert human.needs.energy == 49
+    assert human.needs.hunger == 51
+    assert human.needs.thirst == 51
+
+
+def test_simulation_schedules_entity_update():
+    simulation = Simulation(mode=SimulationMode.STEP)
+
+    Entity._reset()
+
+    human = Human(
+        name="John",
+        sex=Sex.MALE,
+        age=20,
+        position=Position(0, 0),
+    )
+    human.spawn()
+    simulation.start()
+
+    assert len(simulation.scheduler.events) == 1
+    assert simulation.scheduler.events[0].name == "Update Entities"
