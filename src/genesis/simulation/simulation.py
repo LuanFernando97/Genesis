@@ -2,9 +2,10 @@ from enum import Enum
 from threading import Thread
 from time import sleep
 
+from genesis.entities.entity import Entity
 from genesis.infrastructure.logger import get_logger
 from genesis.simulation.clock import Clock
-from genesis.simulation.scheduler import Scheduler
+from genesis.simulation.scheduler import Event, Scheduler
 from genesis.world.world_generator import WorldGenerator
 
 
@@ -61,6 +62,15 @@ class Simulation:
         self._initialize_world()
 
         self.thread = Thread(target=self.run, daemon=True)
+
+        self.scheduler.schedule(
+            Event(
+                tick=1,
+                callback=self._update_entities,
+                name="Update Entities",
+            )
+        )
+
         if self.mode == SimulationMode.REALTIME:
             self.thread.start()
 
@@ -153,6 +163,18 @@ class Simulation:
         if self.world is None:
             raise RuntimeError("World has not been initialized.")
         self.world.update(self.clock.current_tick)
+
+    def _update_entities(self):
+        for entity in Entity.entities():
+            entity.update()
+
+        self.scheduler.schedule(
+            event=Event(
+                tick=self.clock.current_tick + 1,
+                callback=self._update_entities,
+                name="Update Entities",
+            )
+        )
 
     def __repr__(self):
         return (

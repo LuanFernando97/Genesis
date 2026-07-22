@@ -1,27 +1,23 @@
 from __future__ import annotations
 
-from abc import ABC
-from typing import TYPE_CHECKING, Iterator, Self
+from abc import ABC, abstractmethod
+from typing import Iterator, Self
 
 from genesis.entities.id_generator import EntityIdGenerator
 from genesis.entities.registry import EntityRegistry
+from genesis.infrastructure.logger import get_logger
 
-if TYPE_CHECKING:
-    from genesis.simulation.simulation import Simulation
+ENTITY_LOGGER_LEVEL = "debug"
 
 
 class Entity(ABC):
     _entity_id_generator: EntityIdGenerator = EntityIdGenerator()
     _registry: EntityRegistry = EntityRegistry()
+    logger = get_logger("entity", level=ENTITY_LOGGER_LEVEL)
 
-    def __init__(self, simulation: Simulation) -> None:
-        self._simulation = simulation
+    def __init__(self) -> None:
         self._alive = True
         self.id, self.display_id = self._generate_ids()
-
-    @property
-    def simulation(self) -> Simulation:
-        return self._simulation
 
     @property
     def is_alive(self) -> bool:
@@ -40,13 +36,8 @@ class Entity(ABC):
     def entities(cls) -> Iterator[Self]:
         return iter(cls._registry)
 
-    @classmethod
-    def spawn(cls, simulation: Simulation) -> Self:
-        entity = cls(simulation)
-
-        cls._registry.add(entity)
-
-        return entity
+    def spawn(self) -> None:
+        self._registry.add(self)
 
     def despawn(self) -> None:
         if not self._alive:
@@ -56,5 +47,9 @@ class Entity(ABC):
 
         self._alive = False
 
+    @abstractmethod
+    def update(self) -> None:
+        Entity.logger.debug(self)
+
     def __repr__(self) -> str:
-        return f"{self.__class__.__name__}_{self.display_id}"
+        return f"<Entity={self.__class__.__name__} id={self.display_id}>"
