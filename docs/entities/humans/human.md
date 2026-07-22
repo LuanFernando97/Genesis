@@ -150,7 +150,7 @@ Current implementation:
 ```
 Simulation Tick
         │
-        ▼
+        v
 Human.update()
         │
         ├── Update Needs

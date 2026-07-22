@@ -78,4 +78,4 @@ Future subclasses will extend it with additional information such as:
 - Consumable effects
 - Crafting recipes
 
-The current implementation serves as the common foundation for every item in Genesis.W
+The current implementation serves as the common foundation for every item in Genesis.

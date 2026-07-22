@@ -17,7 +17,7 @@ Example:
 ```
 Human
     │
-    ▼
+    v
 Current State
     │
     ├── IDLE

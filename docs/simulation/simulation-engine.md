@@ -165,19 +165,19 @@ Simulation
 
     │
 
-    ▼
+    v
 
 Scheduler
 
     │
 
-    ▼
+    v
 
 Update Entities Event
 
     │
 
-    ▼
+    v
 
 Entity.update()
 ```
